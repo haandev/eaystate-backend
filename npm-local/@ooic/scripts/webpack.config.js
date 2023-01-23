@@ -10,6 +10,9 @@ module.exports = (env) => ({
   entry: "./src/app.ts",
   mode: env.target,
   target: "node",
+  node:{
+    __dirname:true
+  },
   ...(env.target === "production" ? { devtool: "eval-cheap-source-map" } : {}),
   output: {
     path: path.resolve(__dirname, "../../../" + (env.target === "production" ? "build" : "build-debug")),

@@ -4,7 +4,7 @@ import uid2 from "uid2";
 
 import { User } from "@/model/User";
 import { Login } from "@/model/Login";
-import { RequestHandler } from "@ooic/core";
+import { RequestHandler, StatusCodes } from "@ooic/core";
 
 export const login: RequestHandler = async (request, response, next) => {
   try {
@@ -13,7 +13,8 @@ export const login: RequestHandler = async (request, response, next) => {
     const user = await User.unscoped().findOne({
       where: { username },
     });
-    if (!user || !(await bcrypt.compare(password, user.password))) throw { statusCode: 403, message: "Invalid Credentials" };
+    if (!user || !(await bcrypt.compare(password, user.password)))
+      throw { statusCode: StatusCodes.UNAUTHORIZED, message: "Invalid Credentials" };
 
     const payload = { id: user.id, username: user.username };
 
@@ -46,10 +47,10 @@ export const login: RequestHandler = async (request, response, next) => {
       expires, //TODO: MAKE IT SAME WITH HEADER
     });
 
-    return response.status(200).send({ ...payload, accessToken:token, refreshToken:_refreshToken });
+    return response.status(200).send({ ...payload, accessToken: token, refreshToken: _refreshToken });
   } catch (error) {
     next(error);
   }
 };
 
-export default login
+export default login;

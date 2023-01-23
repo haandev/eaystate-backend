@@ -14,10 +14,10 @@ export const verifyToken: RequestHandler = async (request, response, next) => {
     const token = accessToken || bearer || xAccessToken || tokenFromBody;
 
     if (!token) {
-      throw { statusCode: 401, message: "Invalid Authorization Strategy" };
+      throw { statusCode: StatusCodes.UNAUTHORIZED, message: "Invalid Authorization Strategy" };
     }
 
-    if (!token) throw { statusCode: 403, message: "A token is required for authentication" };
+    if (!token) throw { statusCode: StatusCodes.UNAUTHORIZED, message: "A token is required for authentication" };
 
     try {
       request.authUser = {
@@ -34,29 +34,7 @@ export const verifyToken: RequestHandler = async (request, response, next) => {
       };
       next();
     } catch (err) {
-      const login = await Login.findOne({
-        where: { refreshToken },
-      });
-      const user = jwt.decode(token) as jwt.JwtPayload;
-      if (login && user && login.userId === user.id) {
-        const { iat, exp, ...payload } = user;
-
-        const token = jwt.sign(payload, process.env.TOKEN_KEY, {
-          expiresIn: "1m",
-        });
-
-        const expires = new Date();
-        expires.setMinutes(expires.getMinutes() + 1);
-
-        response.cookie("accessToken ", token, {
-          //  secure: process.env.NODE_ENV !== "development",
-          httpOnly: true,
-          expires,
-        });
-        next();
-      } else {
-        throw { statusCode: StatusCodes.FORBIDDEN, message: "Invalid access token" };
-      }
+      throw { statusCode: StatusCodes.FORBIDDEN, message: "Invalid access token" };
     }
   } catch (error) {
     next(error);

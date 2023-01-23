@@ -35,7 +35,7 @@ export const refreshToken: RequestHandler = async (request, response, next) => {
 
       return response.status(200).send({ ...payload, accessToken:token });
     } else {
-      throw { statusCode: StatusCodes.FORBIDDEN, message: "Invalid refresh token" };
+      throw { statusCode: StatusCodes.UNAUTHORIZED, message: "Invalid refresh token" };
     }
   } catch (error) {
     next(error);

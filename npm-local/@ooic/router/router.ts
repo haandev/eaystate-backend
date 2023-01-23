@@ -1,10 +1,12 @@
 import fs from "fs";
+import path from "path";
 import { toKebabCase } from "@ooic/utils";
 import { Express, RequestHandler } from "express";
 import { RequestSchemaType, RouteGroupModuleType, RouteType, SingleRouteModuleType } from "./types";
 const loadRouteFolder = (app, folderName) => {
-  const f = folderName.replace("@/","src/")
-  const items = fs.readdirSync(`${f}/`, {
+  const f = folderName.replace("@/","../../../src/")
+  const p = path.resolve(__dirname,f)
+  const items = fs.readdirSync(`${p}/`, {
     withFileTypes: true,
   });
   items.forEach(async (item) => {
@@ -24,18 +26,21 @@ const loadRouteFolder = (app, folderName) => {
   });
 };
 
-const routeMounter = (app, router: RouteType, path: string) => {
+const routeMounter = (app, router: RouteType, path: string, middleware:any[]=[]) => {
   path = path.replace("@/router","")
   if ("method" in router) {
     app[router.method](
-      `${path}`,
+      `${path}`, ...middleware,
       ...("schema" in router ? [RequestValidationCtor(router.schema), ...router.handler] : [...router.handler])
     );
   }
 
-  if ("routes" in router) {
-    router.routes.forEach((subRouter) => {
-      routeMounter(app, subRouter, `${path}${subRouter.path}`);
+  if ("routes" in router ) {
+    const handlers = router.handler || []
+    router.routes.forEach((subRoute) => {
+      if ("path" in subRoute)
+      routeMounter(app, subRoute, `${path}${subRoute.path}`, [...middleware, ...handlers]);
+      else routeMounter(app, subRoute, `${path}`, [...middleware, ...handlers]);
     });
   }
 };

@@ -14,6 +14,7 @@ import { swaggerify } from "./swagger-autogen";
 import unhandled from "./unhandled";
 import packageJson from "./../../../package.json";
 import { log } from ".";
+import { isPortOk } from "./utils";
 
 export async function ooic(config: OoicConfig) {
   const app = express();
@@ -37,7 +38,7 @@ export async function ooic(config: OoicConfig) {
   await connect();
   await router(app);
   try {
-    if (fs.existsSync("src/model/model_relation_map.ts")) {
+    if (fs.existsSync("src/model/model_relation_map.ts") || fs.existsSync("src/model/model_relation_map.keep")) {
       await import("./../../../src/model/model_relation_map");
     } else {
       console.warn("Missing model relation mapper. Please put 'model_relation_map.ts' in src/model directory.");
@@ -49,18 +50,17 @@ export async function ooic(config: OoicConfig) {
   await swaggerify(app);
   await sync();
 
-  if (fs.existsSync("src/model/seeder.ts")) {
+  if (fs.existsSync("src/model/seeder.ts") || fs.existsSync("src/model/seeder.keep")) {
     await (await import("./../../../src/model/seeder")).default();
   }
 
   if (process.env.NODE_ENV === "development") {
-    http.createServer(app).listen(process.env.PORT || process.env.APP_PORT);
+    const httpPort = await isPortOk(process.env.PORT || process.env.APP_PORT);
+    http.createServer(app).listen(httpPort);
     log(
-      `\nWelcome to ${packageJson.name} v${packageJson.version}! Listening on port ${
-        process.env.PORT || process.env.APP_PORT
-      }` +
+      `\nWelcome to ${packageJson.name} v${packageJson.version}! Listening on port ${httpPort}` +
         `\nRunning on environment: ${process.env.NODE_ENV}` +
-        `\nhttp://localhost:${process.env.PORT || process.env.APP_PORT}`
+        `\nhttp://localhost:${httpPort}`
     );
   } else {
     http.createServer(app).listen(process.env.PORT || process.env.APP_PORT);

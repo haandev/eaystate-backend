@@ -4,7 +4,7 @@
     "body": [
       "import { RequestHandler } from \"@ooic/core\";",
       "",
-      "const ${TM_FILENAME_BASE}: RequestHandler = async (request, response, next) => {",
+      "export const ${TM_FILENAME_BASE}: RequestHandler = async (request, response, next) => {",
       "  try {",
       "    ${1:/* try code */}",
       "  } catch (error) {",
@@ -120,8 +120,25 @@
       ""
     ],
     "description": "Error handler middleware"
+  },
+  "Single Router Module": {
+    "prefix": "srm",
+    "body": [
+      "import { SingleRouteModuleType } from '@ooic/router'",
+      "import { zod } from '@ooic/core'",
+      "import * as handlers from '@/handlers'",
+      "",
+      "const ${TM_FILENAME_BASE/(.*)$/${1:/pascalcase}/}: SingleRouteModuleType = {",
+      "  method: 'post',",
+      "  handler: [],",
+      "  schema: {",
+      "    body: zod.object({}),",
+      "  },",
+      "}",
+      "",
+      "export default ${TM_FILENAME_BASE/(.*)$/${1:/pascalcase}/}",
+      ""
+    ],
+    "description": "Single Router Module"
   }
-
-
-
 }

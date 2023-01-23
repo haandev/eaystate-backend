@@ -6,24 +6,25 @@
   "scripts": {
     "pre-setup": "npx rimraf ./node_modules/@ooic && npx rimraf ./yarn.lock",
     "setup": "npm run pre-setup && yarn",
-    "start": "node node_modules/@ooic/scripts/start.js",
-    "start:build": "node node_modules/@ooic/scripts/start-build.js",
+    "start": "node build/index.js",
+    "start:build": "npm run build && npm run start",
     "copy-core": "npx rimraf ./node_modules/@ooic && npx copy-folder-util npm-local/@ooic node_modules/@ooic  --quiet",
     "dev": "npm run copy-core && npx rimraf ./build-debug && node node_modules/@ooic/scripts/dev.js",
     "debug": "npm run dev",
-    "build": "node node_modules/@ooic/scripts/build.js",
-    "build-debug": "node node_modules/@ooic/scripts/build-debug.js"
+    "build": "npm run copy-core && node node_modules/@ooic/scripts/build.js",
+    "build-debug": "npm run copy-core && node node_modules/@ooic/scripts/build-debug.js"
   },
   "license": "MIT",
   "dependencies": {
     "@ooic/core": "./npm-local/@ooic/core",
-    "@ooic/scripts": "./npm-local/@ooic/scripts",
     "@ooic/router": "./npm-local/@ooic/router",
+    "@ooic/scripts": "./npm-local/@ooic/scripts",
     "@ooic/utils": "./npm-local/@ooic/utils",
     "@types/chalk": "^2.2.0",
     "bcryptjs": "^2.4.3",
     "chalk": "^5.0.1",
     "fs": "^0.0.1-security",
+    "fs-extra": "^11.1.0",
     "jsonwebtoken": "^8.5.1",
     "uid2": "^1.0.0"
   },
@@ -31,6 +32,7 @@
     "@types/bcrypt": "^5.0.0",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/uid2": "^0.0.0",
-    "copy-folder": "^1.0.10"
+    "copy-folder-util": "^0.2.5",
+    "fs-extra": "^11.1.0"
   }
 }

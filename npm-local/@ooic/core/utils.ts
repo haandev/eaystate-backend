@@ -1,4 +1,5 @@
 import { Model } from "@sequelize/core";
+import http from "http";
 
 export const isStartsCapital = (str: string) => str && str.charAt(0) === str.charAt(0).toUpperCase();
 
@@ -123,3 +124,39 @@ export const clearLastLine = () => {
   process.stdout.clearLine(1) // from cursor to end
 }
 
+
+
+
+export const isPortOk = (port: number | string, maxAttempt: number = 5, attempt: number = 0) => {
+  const _port = Number(port);
+  const a = attempt + 1;
+  let resolver;
+  let rejecter;
+  const prm = new Promise((resolve, reject) => {
+    resolver = resolve;
+    rejecter = reject;
+  });
+
+  const server = http.createServer();
+
+  server.once("error", async function (err: any) {
+    if (err.code === "EADDRINUSE") {
+      console.warn("Port is in use : ", _port);
+      if (a < maxAttempt) {
+        resolver(await isPortOk(_port + 1, maxAttempt, a));
+      } else {
+        console.error("Free port not found in max attempt", maxAttempt);
+        rejecter();
+      }
+      // port is currently in use
+    }
+  });
+
+  server.once("listening", function () {
+    resolver(_port);
+    server.close();
+  });
+  server.listen(_port);
+
+  return prm;
+};

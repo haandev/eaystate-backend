@@ -1,5 +1,2 @@
-import * as auth from "./auth";
-
-export default {
-  auth,
-};
+export * as auth from "./auth";
+export * as company from "./company";

@@ -3,7 +3,7 @@ import { ZodSchema } from "zod";
 
 export declare type RoutesType = Array<RouteType>;
 
-export declare type RouteType = RouteGroupType | SingleRouteType;
+export declare type RouteType = RouteGroupType | SingleRouteType | SingleRouteModuleType | RouteGroupModuleType;
 
 export declare type RouteGroupType = {
   path: string;
@@ -15,6 +15,7 @@ export declare type SingleRouteType = {
 
 export type RouteGroupModuleType = {
   routes: RoutesType;
+  handler?: Array<RequestHandler>;
 };
 
 export type SingleRouteModuleType = {

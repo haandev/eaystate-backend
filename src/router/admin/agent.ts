@@ -2,21 +2,27 @@ import * as handlers from "@/handlers";
 import { zod } from "@ooic/core";
 import { RouteGroupModuleType } from "@ooic/router";
 
-const index: RouteGroupModuleType = {
+const Agent: RouteGroupModuleType = {
   handler: [handlers.auth.verifyToken],
   routes: [
     {
       method: "post",
       schema: {
-        body: zod.object({
-          title: zod.string(),
-        }),
+        body: zod.object({}),
       },
-      handler: [handlers.company.create],
+      handler: [],
     },
     {
       method: "get",
-      handler: [handlers.company.list],
+      handler: [],
+      schema: {
+        query: zod.object({
+          pageIndex: zod.number(),
+          pageSize: zod.number(),
+          sortBy: zod.string(),
+          sortType: zod.string(),
+        }),
+      },
     },
     {
       path: "/:id",
@@ -26,7 +32,7 @@ const index: RouteGroupModuleType = {
           id: zod.string().regex(/^\d+$/).transform(Number),
         }),
       },
-      handler: [handlers.company.getById],
+      handler: [],
     },
     {
       path: "/:id",
@@ -36,9 +42,7 @@ const index: RouteGroupModuleType = {
         params: zod.object({
           id: zod.string().regex(/^\d+$/).transform(Number),
         }),
-        body: zod.object({
-          title: zod.string().optional(),
-        }),
+        body: zod.object({}),
       },
     },
     {
@@ -49,8 +53,8 @@ const index: RouteGroupModuleType = {
           id: zod.string().regex(/^\d+$/).transform(Number),
         }),
       },
-      handler: [handlers.company.destroy],
+      handler: [],
     },
   ],
 };
-export default index;
+export default Agent;

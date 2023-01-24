@@ -12,7 +12,8 @@
     "dev": "npm run copy-core && npx rimraf ./build-debug && node node_modules/@ooic/scripts/dev.js",
     "debug": "npm run dev",
     "build": "npm run copy-core && node node_modules/@ooic/scripts/build.js",
-    "build-debug": "npm run copy-core && node node_modules/@ooic/scripts/build-debug.js"
+    "build-debug": "npm run copy-core && node node_modules/@ooic/scripts/build-debug.js",
+    "servant": "npm-local/@ooic/servant/index.js"
   },
   "license": "MIT",
   "dependencies": {

@@ -53,8 +53,8 @@ export const RequestValidationCtor = (schema: RequestSchemaType) => {
   const requestValidationMiddleware: RequestHandler = async (request, response, next) => {
     try {
       if (schema.body) request.body = schema.body.parse(request.body);
-      if (schema.query) request.query = schema.body.parse(request.query);
-      if (schema.params) request.params = schema.body.parse(request.params);
+      if (schema.query) request.query = schema.query.parse(request.query);
+      if (schema.params) request.params = schema.params.parse(request.params);
       next()
     } catch (error) {
       next(error);

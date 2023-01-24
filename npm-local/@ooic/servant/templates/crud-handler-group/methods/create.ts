@@ -1,13 +1,13 @@
-import { Company } from "@/model/Company";
+import { {{{model}}} } from "@/model/{{{model}}}";
 import { RequestHandler, StatusCodes } from "@ooic/core";
 
 export const create: RequestHandler = async (request, response, next) => {
   try {
     const body = request.body;
-    const company = await Company.create({
+    const {{{singular}}} = await {{{model}}}.create({
         ...body
     })
-    response.status(StatusCodes.CREATED).send(company)
+    response.status(StatusCodes.CREATED).send({{{singular}}})
   } catch (error) {
     next(error)
   }

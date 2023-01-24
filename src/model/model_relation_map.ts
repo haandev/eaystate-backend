@@ -13,7 +13,7 @@ import { Value } from "./Value";
 const pagerScopeFactory = (params) => {
   const { pageIndex, pageSize } = params;
   return {
-    offset: pageIndex * pageSize,
+    offset: (pageIndex - 1) * pageSize,
     limit: pageSize,
   };
 };
@@ -31,8 +31,6 @@ const byOwnerScopeFactory = (userId: number) => ({
 });
 
 Login.belongsTo(User, { foreignKey: "userId" });
-
-
 
 Agent.belongsTo(Company, { foreignKey: "companyId", as: "company" });
 Company.hasMany(Agent, { foreignKey: "companyId", as: "agents" });
@@ -64,3 +62,6 @@ Category.belongsToMany(Feature, {
 Estate.hasMany(Value, { foreignKey: "featureId", as: "values" });
 Value.belongsTo(Feature, { foreignKey: "featureId", as: "feature" });
 Value.belongsTo(Estate, { foreignKey: "estateId", as: "estate" });
+
+Company.addScope("pager", pagerScopeFactory);
+Agent.addScope("pager", pagerScopeFactory);

@@ -1,13 +1,13 @@
-import { Company } from "@/model/Company";
+import { SmartModel } from "@/model/SmartModel";
 import { RequestHandler, StatusCodes } from "@ooic/core";
 
 export const destroy: RequestHandler = async (request, response, next) => {
   try {
     const { id } = request.params;
-    const company = await Company.findByPk(id);
+    const smartModel = await SmartModel.findByPk(id);
 
-    company.destroy();
-    response.status(StatusCodes.OK).send(company);
+    smartModel.destroy();
+    response.status(StatusCodes.OK).send(smartModel);
   } catch (error) {
     next(error);
   }

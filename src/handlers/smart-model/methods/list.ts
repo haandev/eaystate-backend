@@ -1,16 +1,13 @@
-import { Company } from "@/model/Company";
+import { SmartModel } from "@/model/SmartModel";
 import { RequestHandler } from "@ooic/core";
 
 export const list: RequestHandler = async (request, response, next) => {
   const { pageIndex, pageSize, sortBy, sortType, ...query } = request.query;
   try {
-    const companies = await Company.scope({
+    const smartModel = await SmartModel.scope({
       method: ["pager", { pageIndex, pageSize }],
-    }).findAndCountAll({
-      where: query,
-      order: [[sortBy as any, sortType as "asc" | "desc"]],
-    });
-    response.send(companies);
+    }).findAndCountAll();
+    response.send(smartModel);
   } catch (error) {
     next(error);
   }

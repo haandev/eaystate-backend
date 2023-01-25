@@ -9,10 +9,14 @@ import { Estate } from "./Estate";
 import { Feature } from "./Feature";
 import { Category } from "./Category";
 import { Value } from "./Value";
+import { SmartField } from "./SmartField";
+import { SmartModel } from "./SmartModel";
+import { SmartRelation } from "./SmartRelation";
 
 const pagerScopeFactory = (params) => {
   const { pageIndex, pageSize } = params;
   return {
+    attributes: { exclude: ["password"] },
     offset: (pageIndex - 1) * pageSize,
     limit: pageSize,
   };
@@ -29,6 +33,13 @@ const localeScopeFactory = (locale) => ({
 const byOwnerScopeFactory = (userId: number) => ({
   where: { ownerId: userId },
 });
+
+
+
+SmartField.belongsTo(SmartModel, { as: "model", foreignKey: "modelId" });
+
+SmartRelation.belongsTo(SmartModel, {as: "sourceModel", foreignKey:"sourceModelId"})
+SmartRelation.belongsTo(SmartModel, {as: "targetModel", foreignKey:"targetModelId"})
 
 Login.belongsTo(User, { foreignKey: "userId" });
 
@@ -65,3 +76,4 @@ Value.belongsTo(Estate, { foreignKey: "estateId", as: "estate" });
 
 Company.addScope("pager", pagerScopeFactory);
 Agent.addScope("pager", pagerScopeFactory);
+SmartModel.addScope("pager",pagerScopeFactory)

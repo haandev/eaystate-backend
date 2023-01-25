@@ -1,6 +1,7 @@
 import fs from "fs";
 import { OoicConfig, ooic, LocalizerFactory, Model,ModelStatic} from "@ooic/core";
 import asyncSmartModelDataSeed from "./seedSmartModelData";
+import { initSmartModels } from "./initSmartModels";
 export const SmartModels: Array<[string,ModelStatic<any>]> = [];
 const config: OoicConfig = {
   cors: {
@@ -28,6 +29,7 @@ const config: OoicConfig = {
 
 (async () => {
   const app = await ooic(config);
+  await initSmartModels();
   await asyncSmartModelDataSeed();
 })();
 

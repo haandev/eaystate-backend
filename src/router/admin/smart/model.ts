@@ -2,26 +2,19 @@ import * as handlers from "@/handlers";
 import { zod } from "@ooic/core";
 import { RouteGroupModuleType } from "@ooic/router";
 
-const Agent: RouteGroupModuleType = {
+const Model: RouteGroupModuleType = {
   handler: [handlers.auth.verifyToken],
   routes: [
     {
       method: "post",
       schema: {
-        body: zod.object({
-          name: zod.string(),
-          surname: zod.string(),
-          username: zod.string(),
-          phone: zod.string(),
-          password: zod.string().optional(),
-          companyId: zod.number(),
-        }),
+        body: zod.object({}),
       },
-      handler: [handlers.agent.create],
+      handler: [handlers.smartModel.create],
     },
     {
       method: "get",
-      handler: [handlers.agent.list],
+      handler: [handlers.smartModel.list],
       schema: {
         query: zod.object({
           pageIndex: zod.number(),
@@ -39,24 +32,17 @@ const Agent: RouteGroupModuleType = {
           id: zod.string().regex(/^\d+$/).transform(Number),
         }),
       },
-      handler: [handlers.agent.getById],
+      handler: [handlers.smartModel.getById],
     },
     {
       path: "/:id",
       method: "put",
-      handler: [handlers.agent.update],
+      handler: [handlers.smartModel.update],
       schema: {
         params: zod.object({
           id: zod.string().regex(/^\d+$/).transform(Number),
         }),
-        body: zod.object({
-          name: zod.string(),
-          surname: zod.string(),
-          username: zod.string(),
-          phone: zod.string(),
-          password: zod.string().optional(),
-          companyId: zod.number(),
-        }),
+        body: zod.object({}),
       },
     },
     {
@@ -67,8 +53,8 @@ const Agent: RouteGroupModuleType = {
           id: zod.string().regex(/^\d+$/).transform(Number),
         }),
       },
-      handler: [handlers.agent.destroy],
+      handler: [handlers.smartModel.destroy],
     },
   ],
 };
-export default Agent;
+export default Model;

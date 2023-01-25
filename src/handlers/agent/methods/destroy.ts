@@ -1,13 +1,13 @@
-import { Company } from "@/model/Company";
+import { Agent } from "@/model/Agent";
 import { RequestHandler, StatusCodes } from "@ooic/core";
 
 export const destroy: RequestHandler = async (request, response, next) => {
   try {
     const { id } = request.params;
-    const company = await Company.findByPk(id);
+    const agent = await Agent.findByPk(id);
 
-    company.destroy();
-    response.status(StatusCodes.OK).send(company);
+    agent.destroy();
+    response.status(StatusCodes.OK).send(agent);
   } catch (error) {
     next(error);
   }

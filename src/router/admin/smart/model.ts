@@ -8,7 +8,19 @@ const Model: RouteGroupModuleType = {
     {
       method: "post",
       schema: {
-        body: zod.object({}),
+        body: zod.object({
+          tableName: zod.string(),
+          modelName: zod.string(),
+          singular: zod.string(),
+          plural: zod.string(),
+          description: zod.string(),
+          icon: zod.string().optional(),
+          isHierarchy: zod.boolean(),
+          userOwnable: zod.boolean(),
+          groupOwnable: zod.boolean(),
+          sortable: zod.boolean(),
+          paranoid: zod.boolean(),
+        }),
       },
       handler: [handlers.smartModel.create],
     },

@@ -34,12 +34,24 @@ const byOwnerScopeFactory = (userId: number) => ({
   where: { ownerId: userId },
 });
 
-
-
 SmartField.belongsTo(SmartModel, { as: "model", foreignKey: "modelId" });
+SmartModel.hasMany(SmartField, { as: "fields", foreignKey: "modelId" });
 
-SmartRelation.belongsTo(SmartModel, {as: "sourceModel", foreignKey:"sourceModelId"})
-SmartRelation.belongsTo(SmartModel, {as: "targetModel", foreignKey:"targetModelId"})
+SmartRelation.belongsTo(SmartModel, {
+  as: "sourceModel",
+  foreignKey: "sourceModelId",
+});
+SmartModel.hasMany(SmartRelation, { as: "relationsAsSource", foreignKey: "sourceModelId" });
+
+SmartRelation.belongsTo(SmartModel, {
+  as: "targetModel",
+  foreignKey: "targetModelId",
+});
+
+SmartModel.hasMany(SmartRelation, { as: "relationsAsTarget", foreignKey: "targetModelId" });
+
+
+SmartModel.addScope("pager", pagerScopeFactory);
 
 Login.belongsTo(User, { foreignKey: "userId" });
 
@@ -76,4 +88,3 @@ Value.belongsTo(Estate, { foreignKey: "estateId", as: "estate" });
 
 Company.addScope("pager", pagerScopeFactory);
 Agent.addScope("pager", pagerScopeFactory);
-SmartModel.addScope("pager",pagerScopeFactory)

@@ -6,7 +6,9 @@ export const list: RequestHandler = async (request, response, next) => {
   try {
     const smartModel = await SmartModel.scope({
       method: ["pager", { pageIndex, pageSize }],
-    }).findAndCountAll();
+    }).findAndCountAll({
+      include: ["fields", "relationsAsSource", "relationsAsTarget"],
+    });
     response.send(smartModel);
   } catch (error) {
     next(error);
@@ -14,3 +16,4 @@ export const list: RequestHandler = async (request, response, next) => {
 };
 
 export default list;
+ 

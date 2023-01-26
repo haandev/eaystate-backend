@@ -1,4 +1,6 @@
 import { sequelize, DataTypes, Model } from "@ooic/core";
+import { SmartField } from "./SmartField";
+import { SmartRelation } from "./SmartRelation";
 
 export class SmartModel extends Model {
   id: number;
@@ -9,10 +11,14 @@ export class SmartModel extends Model {
   description: string;
   icon: string;
   isHierarchy: boolean;
-  userOwnable:boolean;
-  groupOwnable:boolean;
+  userOwnable: boolean;
+  groupOwnable: boolean;
   sortable: boolean;
   paranoid: boolean;
+  fields: Array<SmartField>;
+  initialized:boolean
+  relationsAsSource: Array<SmartRelation>;
+  relationsAsTarget: Array<SmartRelation>;
 }
 
 SmartModel.init(
@@ -26,26 +32,24 @@ SmartModel.init(
     tableName: {
       type: DataTypes.STRING(255),
       allowNull: false,
+      unique: true,
     },
     modelName: {
       type: DataTypes.STRING(255),
       allowNull: false,
-    },
+      unique: true,
+    }, 
     singular: {
       type: DataTypes.STRING(255),
-      get(){
-        return (this.getDataValue("singular") || this.getDataValue("modelName")).toLowerCase()
-      },
       allowNull: true,
+      unique: true,
     },
     plural: {
       type: DataTypes.STRING(255),
-      get(){
-        return (this.getDataValue("plural") || this.getDataValue("tableName")).toLowerCase()
-      },
       allowNull: true,
+      unique: true,
     },
-    description: { 
+    description: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
@@ -56,6 +60,11 @@ SmartModel.init(
     isHierarchy: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
+    },
+    initialized: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
       defaultValue: false,
     },
     userOwnable: {
@@ -69,15 +78,15 @@ SmartModel.init(
       defaultValue: false,
     },
     sortable: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
-      paranoid: {
-          type: DataTypes.BOOLEAN,
-          allowNull: false,
-          defaultValue: false,
-        },
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    paranoid: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     tableName: "smartmodel",

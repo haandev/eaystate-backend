@@ -70,8 +70,8 @@ import {
     const patchAttributes = await initSmartFields(smartFields);
   
     const ModelSelf = model.isHierarchy
-    ? class SmartField extends HierarchicalModel {}
-    : class SmartField extends Model {};
+    ? class SmartModel extends HierarchicalModel {}
+    : class SmartModel extends Model {};
   
     SmartModels.push([modelName, ModelSelf] )
   
@@ -90,7 +90,7 @@ import {
     };
     if (model.sortable) {
       attributes[smartPrefix + "order"] = {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER, 
         defaultValue: 0,
         allowNull: true,
       };
@@ -156,6 +156,7 @@ import {
         ModelLocale.belongsTo(User, { as: "owner", foreignKey: "ownerId" });
       }
     }
+    await model.update({initialized:1})
     return true;
   };
   

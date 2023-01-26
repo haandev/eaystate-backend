@@ -7,8 +7,7 @@ let ids: any = {};
 
 const asyncSeed = async () => {
   log("\n\n\x1B[36mDB > seeding started.\x1B[0m ");
-
-  /** create Company model */
+/* 
   await SmartModel.findOrCreate({
     where: {
       tableName: "companies",
@@ -47,7 +46,6 @@ const asyncSeed = async () => {
     },
   }); 
 
-  /** create category model */
   await SmartModel.findOrCreate({
     where: {
       tableName: "categories",
@@ -110,7 +108,6 @@ const asyncSeed = async () => {
     },
   });
 
-  /** create category-company relation */
   await SmartRelation.findOrCreate({ 
     where: {
       sourceModelId: ids.CategoryModel,
@@ -120,7 +117,6 @@ const asyncSeed = async () => {
     },
   });
 
-  /** create table model */
   await SmartModel.findOrCreate({
     where: {
       tableName: "tables",
@@ -183,7 +179,6 @@ const asyncSeed = async () => {
     },
   });
 
-  /** create table-company relation */
   await SmartRelation.findOrCreate({ 
     where: {
       sourceModelId: ids.TableModel,
@@ -194,7 +189,6 @@ const asyncSeed = async () => {
   }); 
 
 
-    /** create product model */
     await SmartModel.findOrCreate({
       where: {
         tableName: "products",
@@ -303,7 +297,6 @@ const asyncSeed = async () => {
       },
     });
 
-  /** create product-category relation */
   await SmartRelation.findOrCreate({ 
     where: {
       sourceModelId: ids.ProductModel,
@@ -311,7 +304,7 @@ const asyncSeed = async () => {
       targetModelId: ids.CategoryModel,
       isTargetMany: false,
     },
-  });  
+  });   */
   clearLastLine()
   log("\x1B[32mDB > Seeded successfully.\x1B[0m ");
 };
